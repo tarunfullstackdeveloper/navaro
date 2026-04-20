@@ -1088,6 +1088,7 @@ footer .uselinks ul {
 /* center slide bigger */
 .stackholderslider .slick-slide {
   transform: rotate(4deg) scale(0.75);
+  z-index: 1;
 }
 .stackholderslider .slick-center .slideinnr {
   opacity: 1;
@@ -1157,7 +1158,15 @@ footer .uselinks ul {
     color: rgba(30, 30, 30, 0.80);
 }
 /* Services Css  */
-
+.stackholderslider {
+  background-image: url(../img/Ellipse6.png);
+}
+.stackholderslider {
+  background-image: url(../img/Ellipse6.png);
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
 @media(max-width: 1025px) {
   .bannercontent {
     padding: 80px 0 0;
@@ -1498,5 +1507,8 @@ footer .uselinks ul {
   }
   .stackholderslide {
     padding: 0 0px;
+  }
+  .stackholderslider {
+    background-position: center;
   }
 }
