@@ -1519,4 +1519,7 @@ footer .uselinks ul {
     padding: 10px;
     font-size: 14px;
   }
+  .menuwrapper .menuwrap ul li a {
+    font-size: 20px;
+  }
 }
