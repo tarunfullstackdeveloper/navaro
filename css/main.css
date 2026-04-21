@@ -1625,4 +1625,8 @@ footer .uselinks ul {
   .realcustomersliderinner {
     padding: 50px 0 140px;
   }
+  .titlebox h2,
+  .bannercontentinner h1 {
+    font-weight: 700;
+  }
 }
