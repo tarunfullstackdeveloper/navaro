@@ -1599,4 +1599,17 @@ footer .uselinks ul {
     width: 100%;
     height: 100%;
   }
+  .call-toaction .call-toactioninner .call-toactioncontent {
+    padding: 60px 20px;
+  }
+  .call-toaction .call-toactioninner .call-toactioncontent h3 {
+    line-height: 1.3;
+  }
+  .call-toaction .call-toactioninner .call-toactioncontent .explorecourse .btn {
+    margin: 8px 0;
+  }
+  .stackholderslide .slideinnr .middleimage {
+    margin: 40px -20px;
+    text-align: center;
+  }
 }
