@@ -1618,4 +1618,11 @@ footer .uselinks ul {
   .cloudsquare svg {
     display: none;
   }
+  .realcustomerslider button.slick-arrow {
+    right: -30px;
+    bottom: -66px;
+  }
+  .realcustomersliderinner {
+    padding: 50px 0 140px;
+  }
 }
