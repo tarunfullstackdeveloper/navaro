@@ -88,27 +88,52 @@ document.querySelectorAll('.cloudsquare svg g').forEach(g => {
 
 gsap.registerPlugin(ScrollTrigger);
 
-gsap.timeline({
-  scrollTrigger: {
-    trigger: ".onesystemtotal",
-    start: "center center",
-    end: "+=800",
-    scrub: 2,
-    anticipatePin: 1,      // ✅ Add karo
-  }
-})
-.to(".onesystemtotaltitle", {
-  opacity: 0,
-  width: 0,
-  duration: 1,
-  ease: "power2.inOut"
-}, 0)
-.to(".onesystemtitlevideo", {
-  width: "100%",
-  duration: 1,
-  ease: "power2.inOut"
-}, 0); // 0 = dono ek saath chalein
+ScrollTrigger.matchMedia({
 
+  // 👉 Sirf desktop (481px se upar)
+  "(min-width: 481px)": function () {
+
+    const MAX_SCALE  = 2.8;
+    const TEXT_SHIFT = "55vw";
+    const SCRUB      = 1.5;
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#pinWrap",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: SCRUB,
+        pin: "#pinInner",
+      }
+    });
+
+    tl
+      .to("#mediaBox", {
+        scale: MAX_SCALE,
+        borderRadius: 0,
+        ease: "none",
+      }, 0)
+      .to("#textLeft", {
+        x: "-" + TEXT_SHIFT,
+        opacity: 0,
+        ease: "none",
+      }, 0)
+      .to("#textRight", {
+        x: TEXT_SHIFT,
+        opacity: 0,
+        ease: "none",
+      }, 0);
+  },
+
+  // 👉 Mobile (optional reset)
+  "(max-width: 480px)": function () {
+    // ensure everything normal on mobile
+    gsap.set("#mediaBox", { clearProps: "all" });
+    gsap.set("#textLeft", { clearProps: "all" });
+    gsap.set("#textRight", { clearProps: "all" });
+  }
+
+});
 $('.stackholderslider').slick({
 slidesToShow: 2.5,
 slidesToScroll: 1,
