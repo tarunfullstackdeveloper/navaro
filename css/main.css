@@ -1612,4 +1612,10 @@ footer .uselinks ul {
     margin: 40px -20px;
     text-align: center;
   }
+  .customerslideinner {
+    padding: 20px;
+  }
+  .cloudsquare svg {
+    display: none;
+  }
 }
