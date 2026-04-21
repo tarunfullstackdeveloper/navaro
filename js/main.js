@@ -164,28 +164,60 @@ responsive: [
     }
 ]
 });
-// if ($(window).width() > 480) { 
-// gsap.registerPlugin(ScrollTrigger);
+if ($(window).width() > 480) { 
+  gsap.registerPlugin(ScrollTrigger);
 
-// let totalSlides = $(".stackholderslide").length;
-// let totalSteps = totalSlides - 1; // jitne steps chalne hain (3 dikhte hain ek time pe)
+    /* ── tweakable values ── */
+    const PEEK         = 120;  /* xPercent shift for half-visible side card       */
+    const GONE         = 300;  /* xPercent shift for fully off-screen card        */
+    const ROT          = 10;   /* rotation degrees on peeking/exiting cards       */
+    const SCRUB        = 1;    /* scrub smoothness (number = lag, true = instant) */
+    const SIDE_SCALE   = 0.8;  /* scale of peeking side cards (center = 1)        */
+    const SIDE_OPACITY = 0.5;  /* opacity of peeking side cards (center = 1)      */
+    const PAUSE        = 0.2;  /* hold duration at each center position           */
+                              /* timeline unit: MOVE=1, PAUSE=0.2 per beat       */
 
-// // GSAP timeline with snapping
-// ScrollTrigger.create({
-//     trigger: ".ourstakholderssec",
-//     start: "top top",
-//     end: "+=" + (totalSteps * window.innerHeight),
-//     pin: true,
-//     pinSpacing: true,        // ✅ Yeh space reserve karega neeche ke liye
-//     anticipatePin: 1,        // ✅ Smooth pin entry ke liye
-//     scrub: true,
-//     snap: 1 / totalSteps,
-//     onUpdate: (self) => {
-//         let index = Math.round(self.progress * totalSteps);
-//         $(".stackholderslider").slick("slickGoTo", index);
-//     }
-// });
-// }
+    /* ── set pin-wrap height based on timeline length ── */
+    const TOTAL_DURATION = 2 * (1 + PAUSE);
+    /* each timeline unit = 1 viewport height of scroll */
+    document.getElementById('pinWrapper').style.height =
+      (TOTAL_DURATION + 1) * 100 + 'vh';
+
+    /* ── initial positions (view 1: teal center, yellow peeks right, purple gone) ── */
+    gsap.set("#c1", { xPercent: 0,     rotation: 0,    scale: 1,          opacity: 1,            zIndex: 3 });
+    gsap.set("#c2", { xPercent: PEEK,  rotation: ROT,  scale: SIDE_SCALE, opacity: SIDE_OPACITY,  zIndex: 2 });
+    gsap.set("#c3", { xPercent: GONE,  rotation: ROT,  scale: SIDE_SCALE, opacity: SIDE_OPACITY,  zIndex: 1 });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#pinWrapper",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: SCRUB,
+        pin: "#stager",
+      }
+    });
+
+    /* ── beat 1: cards move → yellow centers ── */
+    tl
+      .to("#c1", { xPercent: -PEEK, rotation: -ROT, scale: SIDE_SCALE, opacity: SIDE_OPACITY, zIndex: 2, ease: "none", duration: 1 }, 0)
+      .to("#c2", { xPercent: 0,     rotation: 0,    scale: 1,          opacity: 1,            zIndex: 3, ease: "none", duration: 1 }, 0)
+      .to("#c3", { xPercent: PEEK,  rotation: ROT,  scale: SIDE_SCALE, opacity: SIDE_OPACITY, zIndex: 2, ease: "none", duration: 1 }, 0)
+
+    /* ── pause 1: yellow is centered, scroll burns here ── */
+    /* (empty label advances timeline time by PAUSE without animating anything) */
+      .addLabel("pause1", 1)
+      .addLabel("pause1end", 1 + PAUSE)
+
+    /* ── beat 2: cards move → purple centers ── */
+      .to("#c1", { xPercent: -GONE, rotation: -ROT, scale: SIDE_SCALE, opacity: SIDE_OPACITY, zIndex: 1, ease: "none", duration: 1 }, 1 + PAUSE)
+      .to("#c2", { xPercent: -PEEK, rotation: -ROT, scale: SIDE_SCALE, opacity: SIDE_OPACITY, zIndex: 2, ease: "none", duration: 1 }, 1 + PAUSE)
+      .to("#c3", { xPercent: 0,     rotation: 0,    scale: 1,          opacity: 1,            zIndex: 3, ease: "none", duration: 1 }, 1 + PAUSE)
+
+    /* ── pause 2: purple is centered, scroll burns here ── */
+      .addLabel("pause2",    2 + PAUSE)
+      .addLabel("pause2end", 2 + PAUSE * 2);
+}
 // Sabse end mein add karo
 $(window).on("load", function() {
     ScrollTrigger.refresh();  // ✅ Sahi heights calculate karega
